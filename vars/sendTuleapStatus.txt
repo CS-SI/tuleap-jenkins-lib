@@ -1,0 +1,3 @@
+# References
+
+Cf. <https://docs.tuleap.org/user-guide/pullrequest.html#configure-jenkins-to-tuleap-feedback>

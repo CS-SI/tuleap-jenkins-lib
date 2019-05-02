@@ -9,22 +9,15 @@ import java.net.URLEncoder;
  *        string(credentialsId: 'GIT_CRED_ID', variable: 'token_git'),
  *        string(credentialsId: 'TULEAP_API_ID', variable: 'token_tuleap')
  *  ]){
- *    sendTuleapStatus {
- *      gitToken = this.env.token_git
- *      apiRestToken = this.env.token_tuleap
- *      targetRepo = 'projet/depot-test.git'
- *      status = "success"
- *    }
+ *    sendTuleapStatus gitToken: this.env.token_git,
+ *                     apiRestToken: this.env.token_tuleap,
+ *                     targetRepo: 'projet/depot-test.git',
+ *                     status: "success"
  *  }
  */ 
 
-def call(body) {
-  // Evaluation du bloc body principal, et récupération de la configuration
-  def config = [:]
-  body.resolveStrategy = Closure.DELEGATE_FIRST
-  body.delegate = config
-  body()
-  
+def call(Map config) {
+
   // Configuration de la step :
   //   gitToken : Token d'accès au dépot GIT
   //   apiRestToken = token d'accès à l'API REST Tuleap

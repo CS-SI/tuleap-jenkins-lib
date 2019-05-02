@@ -24,7 +24,17 @@ def call(Map config) {
   def gitToken = config.gitToken
   def serverPath = config.tuleapServer ?: "https://tuleap.net"
   def targetRepoId = config.targetRepo ? URLEncoder.encode(config.targetRepo, "UTF-8") : 0
-  def status = (config.status == "success") ? "success" : "failure"
+  def status = config.status
+  if (config.status == null) {
+    // If status not explicitly set, use current build's status
+    if(currentBuild.resultIsBetterOrEqualTo("SUCCESS")) {
+      status = "success"
+    } else {
+      status = "failure"
+    }
+  }
+  // Ensure status is lower case (for example, currentBuild is upper case)
+  status = status.toLowerCase()
 
   // récupération de l'ID du dernier commit
   def version = sh( script: 'git rev-parse HEAD', returnStdout: true).toString().trim()

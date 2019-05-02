@@ -33,6 +33,8 @@ def call(Map config) {
       status = "failure"
     }
   }
+  // Ensure status is lower case (for example, currentBuild is upper case)
+  status = status.toLowerCase()
 
   // récupération de l'ID du dernier commit
   def version = sh( script: 'git rev-parse HEAD', returnStdout: true).toString().trim()

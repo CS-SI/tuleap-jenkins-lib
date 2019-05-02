@@ -18,9 +18,9 @@ def call(Map config) {
 
   // Configuration de la step :
   //   gitToken : Token d'accès au dépot GIT
-  //   tuleapServer = chemin vers le server Tuleap (tuleap.net par defaut)
-  //   targetRepo = ID ou chemin du dépot
-  //   status = success / failure
+  //   tuleapServer : chemin vers le server Tuleap (tuleap.net par defaut)
+  //   targetRepo : ID ou chemin du dépot
+  //   status : success / failure
   def gitToken = config.gitToken
   def serverPath = config.tuleapServer ?: "https://tuleap.net"
   def targetRepoId = config.targetRepo ? URLEncoder.encode(config.targetRepo, "UTF-8") : 0

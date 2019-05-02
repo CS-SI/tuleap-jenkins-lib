@@ -1,3 +1,5 @@
 # References
 
 Cf. <https://docs.tuleap.org/user-guide/pullrequest.html#configure-jenkins-to-tuleap-feedback>
+
+For security context: <https://support.cloudbees.com/hc/en-us/articles/360017530472-Pipeline-Script-Security>

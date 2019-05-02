@@ -7,10 +7,8 @@ import java.net.URLEncoder;
  * 
  *  withCredentials([
  *        string(credentialsId: 'GIT_CRED_ID', variable: 'token_git'),
- *        string(credentialsId: 'TULEAP_API_ID', variable: 'token_tuleap')
  *  ]){
  *    sendTuleapStatus gitToken: this.env.token_git,
- *                     apiRestToken: this.env.token_tuleap,
  *                     targetRepo: 'projet/depot-test.git',
  *                     status: "success"
  *  }
@@ -20,12 +18,10 @@ def call(Map config) {
 
   // Configuration de la step :
   //   gitToken : Token d'accès au dépot GIT
-  //   apiRestToken = token d'accès à l'API REST Tuleap
   //   tuleapServer = chemin vers le server Tuleap (tuleap.net par defaut)
   //   targetRepo = ID ou chemin du dépot
   //   status = success / failure
   def gitToken = config.gitToken
-  def apiRestToken = config.apiRestToken
   def serverPath = config.tuleapServer ?: "https://tuleap.net"
   def targetRepoId = config.targetRepo ? URLEncoder.encode(config.targetRepo, "UTF-8") : 0
   def status = (config.status == "success") ? "success" : "failure"
@@ -48,7 +44,6 @@ def call(Map config) {
     http.setDoOutput(true)
     http.setRequestProperty("Accept", 'application/json')
     http.setRequestProperty("Content-Type", 'application/json; charset=UTF-8')
-    http.setRequestProperty("X-Auth-AccessKey", apiRestToken)
     http.outputStream.write(message.getBytes("UTF-8"))
     
     int retcode = 1;

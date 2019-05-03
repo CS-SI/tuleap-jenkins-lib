@@ -1,0 +1,10 @@
+* `tuleapServer`: Server's URL (example: `https://tuleap.net`). By default, URL of [Odin](https://tuleap.net) is used.
+* `targetRepo`: Path to the repository (example: `project-name/repo-name.git`).
+* `status`: Effective status (`"success"` / `"failure"`). If not set, the status is based on the current build (cf. `${currentBuild.currentResult}`).
+* `gitToken`: Specific token to access the API. This token can be retrieved in the administration dashboard of the repository, in the **Token** tab.
+
+# References
+
+Cf. <https://docs.tuleap.org/user-guide/pullrequest.html#configure-jenkins-to-tuleap-feedback>
+
+For security context: <https://support.cloudbees.com/hc/en-us/articles/360017530472-Pipeline-Script-Security>

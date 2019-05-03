@@ -7,35 +7,34 @@ import java.net.URLEncoder;
  * 
  *  withCredentials([
  *        string(credentialsId: 'GIT_CRED_ID', variable: 'token_git'),
- *        string(credentialsId: 'TULEAP_API_ID', variable: 'token_tuleap')
  *  ]){
- *    sendTuleapStatus {
- *      gitToken = this.env.token_git
- *      apiRestToken = this.env.token_tuleap
- *      targetRepo = 'projet/depot-test.git'
- *      status = "success"
- *    }
+ *    sendTuleapStatus gitToken: this.env.token_git,
+ *                     targetRepo: 'projet/depot-test.git',
+ *                     status: "success"
  *  }
  */ 
 
-def call(body) {
-  // Evaluation du bloc body principal, et récupération de la configuration
-  def config = [:]
-  body.resolveStrategy = Closure.DELEGATE_FIRST
-  body.delegate = config
-  body()
-  
+def call(Map config) {
+
   // Configuration de la step :
   //   gitToken : Token d'accès au dépot GIT
-  //   apiRestToken = token d'accès à l'API REST Tuleap
-  //   tuleapServer = chemin vers le server Tuleap (tuleap.net par defaut)
-  //   targetRepo = ID ou chemin du dépot
-  //   status = success / failure
+  //   tuleapServer : chemin vers le server Tuleap (tuleap.net par defaut)
+  //   targetRepo : ID ou chemin du dépot
+  //   status : success / failure
   def gitToken = config.gitToken
-  def apiRestToken = config.apiRestToken
   def serverPath = config.tuleapServer ?: "https://tuleap.net"
   def targetRepoId = config.targetRepo ? URLEncoder.encode(config.targetRepo, "UTF-8") : 0
-  def status = (config.status == "success") ? "success" : "failure"
+  def status = config.status
+  if (config.status == null) {
+    // If status not explicitly set, use current build's status
+    if(currentBuild.resultIsBetterOrEqualTo("SUCCESS")) {
+      status = "success"
+    } else {
+      status = "failure"
+    }
+  }
+  // Ensure status is lower case (for example, currentBuild is upper case)
+  status = status.toLowerCase()
 
   // récupération de l'ID du dernier commit
   def version = sh( script: 'git rev-parse HEAD', returnStdout: true).toString().trim()
@@ -55,7 +54,6 @@ def call(body) {
     http.setDoOutput(true)
     http.setRequestProperty("Accept", 'application/json')
     http.setRequestProperty("Content-Type", 'application/json; charset=UTF-8')
-    http.setRequestProperty("X-Auth-AccessKey", apiRestToken)
     http.outputStream.write(message.getBytes("UTF-8"))
     
     int retcode = 1;

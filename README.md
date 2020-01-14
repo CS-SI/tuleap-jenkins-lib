@@ -7,9 +7,9 @@ This library needs to be *trusted*, so it has to be declared in Jenkins in the [
 ## Tuleap integration
 
 Tuleap offers an API to report effective build status to the associated commit, allowing this information to be displayed on the pull request dashboard.
-But this feature require some non trivial actions, as described in the [related documentation](https://docs.tuleap.org/user-guide/pullrequest.html#configure-jenkins-to-tuleap-feedback).
+But this feature requires some non trivial actions, as described in the [related documentation](https://docs.tuleap.org/user-guide/pullrequest.html#configure-jenkins-to-tuleap-feedback).
 
-The `sendTuleapStatus` step simplify this action.
+The `sendTuleapStatus` step simplifies this action.
 The expected parameters:
 
 * `tuleapServer`: Server's URL (example: `https://tuleap.exampe.com`). By default, URL of [Tuleap](https://tuleap.net) is used.
@@ -19,7 +19,7 @@ The expected parameters:
 
 As the Git Token is volatile (it is possible to revoke and regenerate this token) and quite sensitive, it is recommended to store this information as a Text Credential in Jenkins, credential associated to the folder of the project/repository concerned.
 
-In the following examples, the API token is named `git-token` in Jenkins).
+In the following examples, the API token is named `git-token` in Jenkins.
 
 Declarative Pipeline example:
 

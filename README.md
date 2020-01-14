@@ -54,6 +54,10 @@ withCredentials([
 }
 ```
 
+# License
+
+Cf. [license file](LICENSE.txt)
+
 # References
 
 More documentation to develop a library at <https://jenkins.io/doc/book/pipeline/shared-libraries/>

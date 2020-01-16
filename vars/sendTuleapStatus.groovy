@@ -18,11 +18,11 @@ def call(Map config) {
 
   // Configuration de la step :
   //   gitToken : Token d'accès au dépot GIT
-  //   tuleapServer : chemin vers le server Tuleap (tuleap.net par defaut)
+  //   tuleapServer : chemin vers le server Tuleap
   //   targetRepo : ID ou chemin du dépot
   //   status : success / failure
   def gitToken = config.gitToken
-  def serverPath = config.tuleapServer ?: "https://tuleap.net"
+  def serverPath = config.tuleapServer
   def targetRepoId = config.targetRepo ? URLEncoder.encode(config.targetRepo, "UTF-8") : 0
   def status = config.status
   if (config.status == null) {
@@ -35,6 +35,10 @@ def call(Map config) {
   }
   // Ensure status is lower case (for example, currentBuild is upper case)
   status = status.toLowerCase()
+
+  if (serverPath == null) {
+    error "The tuleapServer parameter must be set"
+  }
 
   // récupération de l'ID du dernier commit
   def version = sh( script: 'git rev-parse HEAD', returnStdout: true).toString().trim()

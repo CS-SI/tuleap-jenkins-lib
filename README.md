@@ -12,7 +12,7 @@ But this feature requires some non trivial actions, as described in the [related
 The `sendTuleapStatus` step simplifies this action.
 The expected parameters:
 
-* `tuleapServer`: Server's URL (example: `https://tuleap.exampe.com`). By default, URL of [Tuleap](https://tuleap.net) is used.
+* `tuleapServer`: Server's URL (example: `https://tuleap.example.com`).
 * `targetRepo`: Path to the repository (example: `project-name/repo-name.git`).
 * `status`: Effective status (`"success"` / `"failure"`). If not set, the status is based on the current build (cf. `${currentBuild.currentResult}`).
 * `gitToken`: Specific token to access the API. This token can be retrieved in the administration dashboard of the repository, in the **Token** tab.

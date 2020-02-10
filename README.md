@@ -1,10 +1,8 @@
-Utilitary Jenkins Library.
+Utilitary Jenkins Library to integrate with [Tuleap](https://www.tuleap.org/).
 
 This library needs to be *trusted*, so it has to be declared in Jenkins in the [Global Shared Libraries](https://jenkins.io/doc/book/pipeline/shared-libraries/#global-shared-libraries).
 
 # Features
-
-## Tuleap integration
 
 Tuleap offers an API to report effective build status to the associated commit, allowing this information to be displayed on the pull request dashboard.
 But this feature requires some non trivial actions, as described in the [related documentation](https://docs.tuleap.org/user-guide/pullrequest.html#configure-jenkins-to-tuleap-feedback).

@@ -41,7 +41,7 @@ def call(Map config) {
   }
 
   // récupération de l'ID du dernier commit
-  def version = sh( script: 'git rev-parse HEAD', returnStdout: true).toString().trim()
+  def version = env.GIT_COMMIT
 
   retry(3){
     // Connexion vers l'API Tuleap

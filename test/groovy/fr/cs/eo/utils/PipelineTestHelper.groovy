@@ -38,6 +38,7 @@ class PipelineTestHelper extends BasePipelineTest {
      */
     void registerDeclarativeMethods() {
         helper.registerAllowedMethod('retry', [Integer.class, Closure.class], { Integer nb, Closure c -> c() })
+        helper.registerAllowedMethod("error", [String.class], { String m -> updateBuildStatus('FAILURE'); throw new Exception(m) })
     }
 
     /**

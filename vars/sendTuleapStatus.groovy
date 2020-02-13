@@ -42,6 +42,8 @@ def call(Map config) {
 
   // récupération de l'ID du dernier commit
   def version = env.GIT_COMMIT
+  if (version == null || version.size() == 0)
+    error "The GIT_COMMIT variable is not set."
 
   retry(3){
     // Connexion vers l'API Tuleap

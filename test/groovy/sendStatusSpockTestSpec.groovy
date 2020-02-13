@@ -52,4 +52,39 @@ class sendStatusSpockTestSpec extends TuleapSpockTestBase {
         'ABORTED'  | "failure" | _
         'UNSTABLE' | "failure" | _
     }
+
+    @Unroll
+    def "test with missing GIT_COMMIT"() {
+
+        given:
+        def options = [
+            gitToken: "12345678890",
+            tuleapServer: mockServerURL,
+            targetRepo: 'project-name/repo-name.git'
+        ]
+
+        and:
+        binding.getVariable('currentBuild').result = 'SUCCESS'
+
+        and:
+        binding.getVariable('currentBuild').resultIsBetterOrEqualTo = { s ->
+            // s is expected to be SUCCESS
+            if (s == 'SUCCESS')
+                return true;
+            else
+                return false;
+        }
+
+        and:
+        binding.setVariable('env', [ ])
+
+        when:
+        def script = loadScript('vars/sendTuleapStatus.groovy')
+        script.call(options)
+
+        then:
+        thrown(Exception)
+        printCallStack()
+        assertJobStatus('FAILURE')
+    }
 }

@@ -1,4 +1,7 @@
 plugins {
+//  id "com.mkobit.jenkins.pipelines.shared-library" version "0.10.1"
+  id "jacoco"
+  id "java"
     id "groovy"
 }
 
@@ -11,4 +14,19 @@ repositories {
 
 dependencies {
     compile "org.codehaus.groovy:groovy-all:2.5.0"
+
+    testCompile group:'com.lesfurets', name:'jenkins-pipeline-unit', version:'1.1'
+    testCompile 'org.spockframework:spock-core:1.1-groovy-2.4'
+    testCompile 'junit:junit:4.12'
+    testCompile 'org.mock-server:mockserver-netty:5.2.2'
+    testCompile 'org.mockito:mockito-core:2.+'
+}
+
+sourceSets {
+
+    test {
+        groovy {
+            srcDirs= ['test/groovy']
+        }
+    }
 }

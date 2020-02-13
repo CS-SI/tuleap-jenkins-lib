@@ -1,0 +1,11 @@
+language: java
+sudo: false
+jdk:
+  - openjdk8
+install: true
+script:
+  ./gradlew build
+cache:
+  directories:
+  - $HOME/.gradle/caches/
+  - $HOME/.gradle/wrapper/

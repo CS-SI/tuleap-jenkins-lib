@@ -39,7 +39,6 @@ def call(Map config) {
     def jsonSlurper = new JsonSlurper()
 
     def limit = 10;
-    def offset = 0;
 
     if (packageName != null) {
         // Look for package in project
@@ -47,7 +46,7 @@ def call(Map config) {
             error 'Project Id is required'
         }
 
-        offset = 0;
+        def offset = 0;
         while (packageId == null && offset > 0) {
             // Connexion vers l'API Tuleap
             def http = new URL("${serverPath}/api/projects/${projectId}/frs_packages?limit=${limit}&offset=${offset}").openConnection() as HttpURLConnection
@@ -89,7 +88,7 @@ def call(Map config) {
             error 'Package Id is required'
         }
 
-        offset = 0;
+        def offset = 0;
         while (releaseId == null && limit > 0) {
             // Connexion vers l'API Tuleap
             def http = new URL("${serverPath}/api/frs_packages/${packageId}/frs_release?limit=${limit}&offset=${offset}").openConnection() as HttpURLConnection

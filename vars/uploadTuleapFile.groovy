@@ -23,6 +23,8 @@ def call(Map config) {
     if (serverPath == null) {
         error "The tuleapServer parameter must be set"
     }
+    // Remove possible trailing slashes: uneeded as we add a slash
+    serverPath = serverPath.replaceAll('/+$',"")
 
     if (accessKey == null) {
         error "The accessKey parameter must be set"

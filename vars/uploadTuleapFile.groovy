@@ -49,7 +49,7 @@ def call(Map config) {
         }
 
         def offset = 0;
-        while (packageId == null && offset > 0) {
+        while (packageId == null && offset >= 0) {
             // Connexion vers l'API Tuleap
             def http = new URL("${serverPath}/api/projects/${projectId}/frs_packages?limit=${limit}&offset=${offset}").openConnection() as HttpURLConnection
 
@@ -93,7 +93,7 @@ def call(Map config) {
         }
 
         def offset = 0;
-        while (releaseId == null && limit > 0) {
+        while (releaseId == null && offset >= 0) {
             // Connexion vers l'API Tuleap
             def http = new URL("${serverPath}/api/frs_packages/${packageId}/frs_release?limit=${limit}&offset=${offset}").openConnection() as HttpURLConnection
 

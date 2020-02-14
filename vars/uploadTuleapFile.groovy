@@ -61,6 +61,8 @@ def call(Map config) {
                 retcode = http.responseCode
 
                 echo "Listing project '${projectId}' (retcode = ${retcode})"
+                if (retcode < 200 || retcode >= 300)
+                    error "Failed to list packages for project '${projectId}'"
 
                 packages = jsonSlurper.parseText(http.getInputStream().getText())
             } finally {
@@ -103,6 +105,8 @@ def call(Map config) {
                 retcode = http.responseCode
 
                 echo "Listing package '${packageId}' (retcode = ${retcode})"
+                if (retcode < 200 || retcode >= 300)
+                    error "Failed to retrieve releases"
 
                 releases = jsonSlurper.parseText(http.getInputStream().getText())
             } finally {
@@ -143,6 +147,8 @@ def call(Map config) {
         retcode = http.responseCode
 
         echo "Listing release '${releaseId}' (retcode = ${retcode})"
+        if (retcode < 200 || retcode >= 300)
+            error "Failed to list release '${releaseId}'"
 
         files = jsonSlurper.parseText(http.getInputStream().getText())
     } finally {
@@ -164,6 +170,8 @@ def call(Map config) {
             }
 
             echo "Delete '${fileName}' (retcode = ${retcode})"
+            if (retcode < 200 || retcode >= 300)
+                error "Failed to delete ${fileName} (id=${file.id})"
         }
     }
 
@@ -192,14 +200,16 @@ def call(Map config) {
     
     def fileInfo
     try {
-      http.connect()
-      retcode = http.responseCode
+        http.connect()
+        retcode = http.responseCode
 
-      echo "Creating '${fileName}' (retcode = ${retcode})"
+        echo "Creating '${fileName}' (retcode = ${retcode})"
+        if (retcode < 200 || retcode >= 300)
+            error "Failed to create '${fileName}'"
 
-      fileInfo = jsonSlurper.parseText(http.getInputStream().getText())
+        fileInfo = jsonSlurper.parseText(http.getInputStream().getText())
     } finally {
-      http.disconnect()
+        http.disconnect()
     }
 
     echo "FileInfo " + fileInfo.dump()
@@ -229,6 +239,8 @@ def call(Map config) {
             offset = offset[0]
 
         echo "Upload '${fileName}' (retcode = ${retcode} offset = ${offset})"
+        if (retcode < 200 || retcode >= 300)
+            error "Failed to upload '${fileName}'"
 
         if (offset == null || Integer.parseInt(offset) < file.length())
             error "Upload failed in a single run: ${offset} < ${file.length()}. Complete TUS protocol is not supported yet."

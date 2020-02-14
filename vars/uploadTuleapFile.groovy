@@ -230,7 +230,7 @@ def call(Map config) {
 
         echo "Upload '${fileName}' (retcode = ${retcode} offset = ${offset})"
 
-        if (Integer.parseInt(offset) < file.length())
+        if (offset == null || Integer.parseInt(offset) < file.length())
             error "Upload failed in a single run: ${offset} < ${file.length()}. Complete TUS protocol is not supported yet."
     } finally {
         http.disconnect()

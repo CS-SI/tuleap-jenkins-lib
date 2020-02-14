@@ -73,7 +73,7 @@ def call(Map config) {
 
             echo "Packages " + packages.dump()
             for (pack in packages) {
-                if (pack.label == packageName)
+                if (pack != null && pack.label == packageName)
                     packageId = pack.id
             }
 
@@ -117,7 +117,7 @@ def call(Map config) {
 
             echo "Releases " + releases.dump()
             for (release in releases.collection) {
-                if (release.name == releaseName)
+                if (release != null && release.name == releaseName)
                     releaseId = release.id
             }
 

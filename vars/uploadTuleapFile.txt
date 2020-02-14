@@ -1,0 +1,17 @@
+Let's upload an arbitrary file to any FRS (File Release System).
+
+* `tuleapServer` (mandatory): The Tuleap server's base URL.
+* `accessKey` (mandatory): the API token of the user, generated from the personnal page.
+* `projectId` (optional): the Id (numeric) of the project.
+* `packageId` (optional): the Id (numeric) of the package concerned.
+* `packageName` (optional): the name of the package concerned, if packageId is not known. Requires a valid projectId.
+* `releaseId` (optional): the Id (numeric) of the release concerned.
+* `releaseName` (optional): the name of the release concerned, if releaseId is not known. Requires a valid projectId. The release would be created if not found.
+* `fileName` (mandatory): the file's name to create in the release.
+* `filePath` (mandatory): the path to the effective file to upload.
+
+Note: this implementation does not support the TUS protocol used by Tuleap server. It simply tries to upload the file content in a single request. Would certainly fail for really huge files.
+
+# References
+
+Cf. <https://docs.tuleap.org/user-guide/integration/rest/tus.html>

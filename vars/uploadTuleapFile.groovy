@@ -121,7 +121,7 @@ def call(Map config) {
                     releaseId = release.id
             }
 
-            if (releases.size() > 0)
+            if (releases.collection.size() > 0)
                 // Prepare next loop
                 offset = offset + limit
             else

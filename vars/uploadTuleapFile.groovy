@@ -180,6 +180,10 @@ def call(Map config) {
     // Create file in release
     def file = new File(filePath)
 
+    if (!file.exists()) {
+        error "File ${filePath} does not exist!"
+    }
+
     // Contenu du message
     def json  = new groovy.json.JsonBuilder()
     json    "release_id": releaseId,
@@ -187,7 +191,7 @@ def call(Map config) {
             "file_size": file.length()
     def message = json.toString()
 
-    echo "File Creation Parameters " + json.dump()
+    echo "File Creation Parameters (${filePath} as ${fileName}) " + json.dump()
 
     // Connexion vers l'API Tuleap
     http = new URL("${serverPath}/api/frs_files").openConnection() as HttpURLConnection

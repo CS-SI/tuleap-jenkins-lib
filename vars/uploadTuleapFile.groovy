@@ -218,6 +218,10 @@ def call(Map config) {
 
     // Envoi contenu
 
+    if (fileInfo.upload_href == null) {
+        error 'Protocol error: Missing upload ref'
+    }
+
     http = new URL("${serverPath}${fileInfo.upload_href}").openConnection() as HttpURLConnection
 
     // Préparation de la requete

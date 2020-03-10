@@ -128,6 +128,45 @@ def call(Map config) {
                 // No more data to read
                 offset = -1
         }
+
+        if (releaseId == null) {
+            // Create release
+
+            // Contenu du message
+            def json  = new groovy.json.JsonBuilder()
+            json    "package_id": packageId,
+                    "name": releaseName
+            def message = json.toString()
+
+            echo "Release Creation Parameters " + json.dump()
+
+            // Connexion vers l'API Tuleap
+            def http = new URL("${serverPath}/api/frs_release").openConnection() as HttpURLConnection
+
+            http.setRequestMethod('POST')
+            http.setDoOutput(true)
+            http.setRequestProperty("Accept", 'application/json')
+            http.setRequestProperty("X-Auth-AccessKey", accessKey)
+            http.setRequestProperty("Content-Type", 'application/json; charset=UTF-8')
+            http.outputStream.write(message.getBytes("UTF-8"))
+
+            def release
+            try {
+                http.connect()
+                retcode = http.responseCode
+
+                echo "Creating release '${releaseName}' (retcode = ${retcode})"
+                if (retcode < 200 || retcode >= 300)
+                    error "Failed to create release"
+
+                release = jsonSlurper.parseText(http.getInputStream().getText())
+            } finally {
+                http.disconnect()
+            }
+
+            echo "Release " + release.dump()
+            releaseId = release.id
+        }
     }
 
     if (releaseId == null) {

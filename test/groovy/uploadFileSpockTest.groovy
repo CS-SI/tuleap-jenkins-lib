@@ -69,11 +69,19 @@ class uploadFileSpockTestSpec extends TuleapSpockTestBase {
 
         and:
         mockServer.when(new HttpRequest()
+                        .withMethod('GET')
                         .withPath("/api/frs_packages/142/frs_release"))
                   .respond(new HttpResponse()
                            .withStatusCode(201)
                            .withBody('{"collection":[],"total_size":0}'));
 
+        and:
+        mockServer.when(new HttpRequest()
+                        .withMethod('POST')
+                        .withPath("/api/frs_release"))
+                  .respond(new HttpResponse()
+                           .withStatusCode(201)
+                           .withBody('{"id":242}'));
 
         and:
         mockServer.when(new HttpRequest()

@@ -38,6 +38,12 @@ def call(Map config) {
         error "The filePath parameter must be set"
     }
 
+    def file = new File(filePath)
+
+    if (!file.exists()) {
+        error "File ${filePath} does not exist!"
+    }
+
     def jsonSlurper = new JsonSlurper()
 
     def limit = 10;
@@ -197,9 +203,9 @@ def call(Map config) {
     }
 
     echo "Files " + files.dump()
-    for (file in files.files) {
-        if (file.name == fileName) {
-            http = new URL("${serverPath}/api/frs_files/${file.id}").openConnection() as HttpURLConnection
+    for (f in files.files) {
+        if (f.name == fileName) {
+            http = new URL("${serverPath}/api/frs_files/${f.id}").openConnection() as HttpURLConnection
             http.setRequestMethod('DELETE')
             http.setRequestProperty("X-Auth-AccessKey", accessKey)
 
@@ -212,16 +218,11 @@ def call(Map config) {
 
             echo "Delete '${fileName}' (retcode = ${retcode})"
             if (retcode < 200 || retcode >= 300)
-                error "Failed to delete ${fileName} (id=${file.id})"
+                error "Failed to delete ${fileName} (id=${f.id})"
         }
     }
 
     // Create file in release
-    def file = new File(filePath)
-
-    if (!file.exists()) {
-        error "File ${filePath} does not exist!"
-    }
 
     // Contenu du message
     def json  = new groovy.json.JsonBuilder()

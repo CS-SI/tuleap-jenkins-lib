@@ -80,7 +80,7 @@ class labelPRSpockTest extends TuleapSpockTestBase {
                         .withStatusCode(200));
 
         when:
-        def script = loadScript('vars/labelPR.groovy')
+        def script = loadScript('vars/labelTuleapPR.groovy')
         script.call(options)
 
         then:
@@ -176,7 +176,7 @@ class labelPRSpockTest extends TuleapSpockTestBase {
                         .withStatusCode(200));
 
         when:
-        def script = loadScript('vars/labelPR.groovy')
+        def script = loadScript('vars/labelTuleapPR.groovy')
         script.call(options)
 
         then:
@@ -200,7 +200,7 @@ class labelPRSpockTest extends TuleapSpockTestBase {
         binding.setVariable('env', [])
 
         when:
-        def script = loadScript('vars/labelPR.groovy')
+        def script = loadScript('vars/labelTuleapPR.groovy')
         script.call(options)
 
         then:

@@ -143,7 +143,7 @@ pipeline {
                           tuleapServer: "https://tuleap.example.com",
                           targetProject: "project_name",
                           targetRepo: "git_repo_name",
-                          comment: "Result of the build: " + env.BUILD_URL
+                          comment: "Result of the build: ${env.BUILD_URL}"
         }
     }
 }

@@ -111,6 +111,54 @@ pipeline {
 
 ```
 
+## Label pull request
+
+Tuleap offers an API to update labels on a pull request. The pull request is determined by the commit hash of the current jenkins build.
+
+The `labelTuleapPR` step simplify this action. The expected parameters:
+
+* `accessKey` The API token of the user, generated from the personnal page.
+* `tuleapServer` Server's URL.
+* `targetProject` The project name or id where to search the PR.
+* `targetRepo` The repository name or id where to search to PR.
+* `addLabels` The label or list of label name to add on the PR.
+* `rmLabels` The label or list of label name to remove on the PR.
+
+As the `accessKey` is volatile (it is possible to revoke and regenerate this token) and quite sensitive, it is recommended to store this information as a Text Credential in Jenkins, credential associated to the folder of the project/repository concerned.
+
+Concern the parameter `addLabels` and `rmLabels`, a least one of these parameter are required. Both could be also given in the same call.
+
+In the following examples, the access key is named `tuleap-token` in Jenkins).
+
+Declarative Pipeline example:
+
+```groovy
+pipeline {
+    environment {
+        TULEAP_ACCESS_KEY = credentials('tuleap-token')
+    }
+    stages {
+        // ...
+    }
+    post {
+        failure {
+            labelTuleapPR accessKey: this.env.TULEAP_ACCESS_KEY,
+                          tuleapServer: "https://tuleap.example.com",
+                          targetProject: "project_name",
+                          targetRepo: "git_repo_name",
+                          addLabels: ["COMPILATION FAILED"]
+        }
+        success {
+            labelTuleapPR accessKey: this.env.TULEAP_ACCESS_KEY,
+                          tuleapServer: "https://tuleap.example.com",
+                          targetProject: "project_name",
+                          targetRepo: "git_repo_name",
+                          rmLabels: ["COMPILATION FAILED"]
+        }
+    }
+}
+```
+
 # License
 
 Cf. [license file](LICENSE.txt)

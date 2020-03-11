@@ -195,7 +195,7 @@ def call(Map config) {
                     error "HTTTP GET ${url} : ${retcode}"
                 }
                 content = http.getInputStream().getText()
-                data = jsonSlurper.parseText(content)
+                def data = jsonSlurper.parseText(content)
                 if (!data.empty) {
                     if (data.reference_src == env.GIT_COMMIT) {
                         prId = data.id

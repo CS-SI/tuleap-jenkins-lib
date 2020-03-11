@@ -80,7 +80,7 @@ class commentPRSpockTest extends TuleapSpockTestBase {
                         .withStatusCode(201));
 
         when:
-        def script = loadScript('vars/commentPR.groovy')
+        def script = loadScript('vars/commentTuleapPR.groovy')
         script.call(options)
 
         then:
@@ -104,7 +104,7 @@ class commentPRSpockTest extends TuleapSpockTestBase {
         binding.setVariable('env', [])
 
         when:
-        def script = loadScript('vars/commentPR.groovy')
+        def script = loadScript('vars/commentTuleapPR.groovy')
         script.call(options)
 
         then:

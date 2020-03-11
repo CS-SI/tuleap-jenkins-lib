@@ -10,7 +10,7 @@ This library needs to be *trusted*, so it has to be declared in Jenkins in the [
 ## Build status
 
 Tuleap offers an API to report effective build status to the associated commit, allowing this information to be displayed on the pull request dashboard.
-But this feature requires some non trivial actions, as described in the [related documentation](https://docs.tuleap.org/user-guide/pullrequest.html#configure-jenkins-to-tuleap-feedback).
+But this feature requires some non trivial actions, as described in the [related documentation](https://docs.tuleap.org/user-guide/code-review/pullrequest.html#configure-jenkins-to-tuleap-feedback).
 
 The `sendTuleapStatus` step simplifies this action.
 The expected parameters:

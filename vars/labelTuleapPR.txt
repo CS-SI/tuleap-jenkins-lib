@@ -1,0 +1,8 @@
+Let's add or remove labels to the PR based on the current commit.
+
+* `accessKey`: (mandatory) The API token of the user.
+* `tuleapServer`: (mandatory) Server's URL.
+* `targetProject`: (mandatory) The project name or id of the project.
+* `targetRepo`: (mandatory) The git repository name or id of the codebase.
+* `addLabels`: (mandatory or optional if rmLabels given) The label or list of labels to add on the PR.
+* `rmLabels`: (mandatory or optional if addLabels given) The label or list of labels to remove on the PR.

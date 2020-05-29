@@ -139,11 +139,11 @@ pipeline {
     }
     post {
         always {
-            labelTuleapPR accessKey: this.env.TULEAP_ACCESS_KEY,
-                          tuleapServer: "https://tuleap.example.com",
-                          targetProject: "project_name",
-                          targetRepo: "git_repo_name",
-                          comment: "Result of the build: ${env.BUILD_URL}"
+            commentTuleapPR accessKey: this.env.TULEAP_ACCESS_KEY,
+                            tuleapServer: "https://tuleap.example.com",
+                            targetProject: "project_name",
+                            targetRepo: "git_repo_name",
+                            comment: "Result of the build: ${env.BUILD_URL}"
         }
     }
 }

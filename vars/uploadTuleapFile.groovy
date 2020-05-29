@@ -38,6 +38,12 @@ def call(Map config) {
         error "The filePath parameter must be set"
     }
 
+    def file = new File(filePath)
+
+    if (!file.exists()) {
+        error "File ${filePath} does not exist!"
+    }
+
     def jsonSlurper = new JsonSlurper()
 
     def limit = 10;
@@ -121,12 +127,51 @@ def call(Map config) {
                     releaseId = release.id
             }
 
-            if (releases.size() > 0)
+            if (releases.collection.size() > 0)
                 // Prepare next loop
                 offset = offset + limit
             else
                 // No more data to read
                 offset = -1
+        }
+
+        if (releaseId == null) {
+            // Create release
+
+            // Contenu du message
+            def json  = new groovy.json.JsonBuilder()
+            json    "package_id": packageId,
+                    "name": releaseName
+            def message = json.toString()
+
+            echo "Release Creation Parameters " + json.dump()
+
+            // Connexion vers l'API Tuleap
+            def http = new URL("${serverPath}/api/frs_release").openConnection() as HttpURLConnection
+
+            http.setRequestMethod('POST')
+            http.setDoOutput(true)
+            http.setRequestProperty("Accept", 'application/json')
+            http.setRequestProperty("X-Auth-AccessKey", accessKey)
+            http.setRequestProperty("Content-Type", 'application/json; charset=UTF-8')
+            http.outputStream.write(message.getBytes("UTF-8"))
+
+            def release
+            try {
+                http.connect()
+                retcode = http.responseCode
+
+                echo "Creating release '${releaseName}' (retcode = ${retcode})"
+                if (retcode < 200 || retcode >= 300)
+                    error "Failed to create release"
+
+                release = jsonSlurper.parseText(http.getInputStream().getText())
+            } finally {
+                http.disconnect()
+            }
+
+            echo "Release " + release.dump()
+            releaseId = release.id
         }
     }
 
@@ -158,9 +203,9 @@ def call(Map config) {
     }
 
     echo "Files " + files.dump()
-    for (file in files.files) {
-        if (file.name == fileName) {
-            http = new URL("${serverPath}/api/frs_files/${file.id}").openConnection() as HttpURLConnection
+    for (f in files.files) {
+        if (f.name == fileName) {
+            http = new URL("${serverPath}/api/frs_files/${f.id}").openConnection() as HttpURLConnection
             http.setRequestMethod('DELETE')
             http.setRequestProperty("X-Auth-AccessKey", accessKey)
 
@@ -173,12 +218,11 @@ def call(Map config) {
 
             echo "Delete '${fileName}' (retcode = ${retcode})"
             if (retcode < 200 || retcode >= 300)
-                error "Failed to delete ${fileName} (id=${file.id})"
+                error "Failed to delete ${fileName} (id=${f.id})"
         }
     }
 
     // Create file in release
-    def file = new File(filePath)
 
     // Contenu du message
     def json  = new groovy.json.JsonBuilder()
@@ -187,7 +231,7 @@ def call(Map config) {
             "file_size": file.length()
     def message = json.toString()
 
-    echo "File Creation Parameters " + json.dump()
+    echo "File Creation Parameters (${filePath} as ${fileName}) " + json.dump()
 
     // Connexion vers l'API Tuleap
     http = new URL("${serverPath}/api/frs_files").openConnection() as HttpURLConnection
@@ -217,6 +261,10 @@ def call(Map config) {
     echo "FileInfo " + fileInfo.dump()
 
     // Envoi contenu
+
+    if (fileInfo.upload_href == null) {
+        error 'Protocol error: Missing upload ref'
+    }
 
     http = new URL("${serverPath}${fileInfo.upload_href}").openConnection() as HttpURLConnection
 

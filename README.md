@@ -159,6 +159,44 @@ pipeline {
 }
 ```
 
+## Comment pull request
+
+Tuleap offers an API to post a comment on a pull request. The pull request is determined by the commit hash of the current jenkins build.
+
+The `commentTuleapPR` step simplify this action. The expected parameters:
+
+* `accessKey` The API token of the user, generated from the personnal page.
+* `tuleapServer` Server's URL.
+* `targetProject` The project name or id where to search the PR.
+* `targetRepo` The repository name or id where to search to PR.
+* `comment` The comment to post on the PR.
+
+As the `accessKey` is volatile (it is possible to revoke and regenerate this token) and quite sensitive, it is recommended to store this information as a Text Credential in Jenkins, credential associated to the folder of the project/repository concerned.
+
+In the following examples, the access key is named `tuleap-token` in Jenkins).
+
+Declarative Pipeline example:
+
+```groovy
+pipeline {
+    environment {
+        TULEAP_ACCESS_KEY = credentials('tuleap-token')
+    }
+    stages {
+        // ...
+    }
+    post {
+        always {
+            commentTuleapPR accessKey: this.env.TULEAP_ACCESS_KEY,
+                            tuleapServer: "https://tuleap.example.com",
+                            targetProject: "project_name",
+                            targetRepo: "git_repo_name",
+                            comment: "Result of the build: ${env.BUILD_URL}"
+        }
+    }
+}
+```
+
 # License
 
 Cf. [license file](LICENSE.txt)

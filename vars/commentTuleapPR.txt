@@ -1,0 +1,7 @@
+Let's add a comment to the PR based on the current commit.
+
+* `accessKey`: (mandatory) The API token of the user.
+* `tuleapServer`: (mandatory) Server's URL.
+* `targetProject`: (mandatory) The project name or id of the project.
+* `targetRepo`: (mandatory) The git repository name or id of the codebase.
+* `comment`: (mandatory) The comment to post on the PR.
